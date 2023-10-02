@@ -1,0 +1,82 @@
+<style>
+  .katex {
+    /* prevent scrollbar from appearing */
+    display: inline-block;
+    overflow: clip;
+  }
+
+  .katex.katex-display {
+    /* inset left-aligned display math */
+    margin-left: 1.5rem;
+  }
+
+  .katex:not(.katex-display) {
+    /* increase line height of inline math */
+    line-height: 1.75;
+  }
+
+  .katex math {
+    /* set some good default OpenType Math fonts */
+    font-family: "Cambria Math", "TeX Gyre Pagella Math", "Asana Math",
+      "STIX Two Math", math, serif;
+  }
+
+  pre.language-math,
+  pre.language-math > code {
+    /* prevent un-processed display math to flash noticebly on load */
+    background: none !important;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", renderMath);
+
+  function renderMath() {
+    // inline math
+    document
+      .querySelectorAll(".docblock :not(pre) > code, .docblock-short code")
+      .forEach(renderInlineMath);
+
+    // display math
+    document
+      .querySelectorAll(".docblock pre.language-math")
+      .forEach(renderDisplayMath);
+  }
+
+  const COMMON_OPTIONS = {
+    output: "mathml",
+    throwOnError: false,
+    errorColor: "color-mix(in oklab, #ff003e 75%, var(--main-color))",
+  };
+
+  /** @param {HTMLElement} codeElement */
+  function renderInlineMath(codeElement) {
+    const wrappedTexCode = codeElement.textContent;
+    if (!wrappedTexCode.startsWith("$") || !wrappedTexCode.endsWith("$")) {
+      return;
+    }
+    const texCode = wrappedTexCode.substring(1, wrappedTexCode.length - 1);
+
+    // replace <code> element with inline math element
+    codeElement.outerHTML = katex.renderToString(texCode, {
+      ...COMMON_OPTIONS,
+      displayMode: false,
+    });
+  }
+
+  /** @param {HTMLPreElement} preElement */
+  function renderDisplayMath(preElement) {
+    // render into new <p>
+    const texCode = preElement.textContent;
+    const pElement = document.createElement("p");
+    katex.render(texCode, pElement, {
+      ...COMMON_OPTIONS,
+      displayMode: true,
+    });
+    pElement.firstElementChild.classList.add("katex-display");
+
+    // replace the <div> wrapping the <pre> with the new <p> containing the display math
+    const divElement = preElement.parentElement;
+    divElement.replaceWith(pElement);
+  }
+</script>

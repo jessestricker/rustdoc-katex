@@ -1,0 +1,10 @@
+[build]
+rustdocflags = [
+  # the minified source code of KaTeX
+  "--html-in-header",
+  ".cargo/katex.v0.16.8.html",
+
+  # custom style and script to integrate KaTeX into rustdoc
+  "--html-in-header",
+  ".cargo/katex-runner.html",
+]
