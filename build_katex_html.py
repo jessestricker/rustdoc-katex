@@ -10,7 +10,7 @@ from urllib.request import urlopen
 
 VERSION: Final = "0.16.8"
 SCRIPT_FILE_NAME: Final = "katex.min.js"
-OUTPUT_FILE_NAME: Final = f"katex.v{VERSION}.html"
+OUTPUT_FILE_NAME: Final = "katex.html"
 
 
 def build_url(file_name: str) -> str:
@@ -29,6 +29,7 @@ def main() -> None:
     makedirs(output_file_path.parent, exist_ok=True)
 
     with output_file_path.open("wb") as output_file:
+        output_file.write(f"<!-- KaTeX v{VERSION} -->\n".encode())
         output_file.write(b"<script>\n")
         download_to_end_of(output_file, build_url(SCRIPT_FILE_NAME))
         output_file.write(b"\n</script>\n")
