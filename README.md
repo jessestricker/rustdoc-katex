@@ -6,6 +6,22 @@ custom JavaScript and CSS which are injected into the generated output by
 `rustdoc`, calling into the embedded KaTeX script to render the math notations
 on page load.
 
+## Installation
+
+1. Download a release that works for your `rustdoc` version (see section
+   [Version numbers](#version-numbers)).
+2. Unzip the archive and copy the contents into your project directory, next to
+   the manifest file:
+
+   ```text
+   <project-dir>
+   ├ .cargo/
+   │ ├ config.toml
+   │ ├ katex-runner.html
+   │ └ katex.html
+   └ Cargo.toml
+   ```
+
 ## Usage
 
 KaTeX supports math notation using the format and commands from the TeX engine.
